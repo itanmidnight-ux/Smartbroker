@@ -1,61 +1,167 @@
-# Smartbroker
+# SmartBroker Trading System
 
-Sistema híbrido para trading algorítmico avanzado con **MetaTrader 5 (EA/MQL5)** y **Python (ML + adaptación automática)**, compatible con Windows.
+A production-grade autonomous trading intelligence platform with machine learning capabilities.
 
-## Inicio rápido (Windows)
-1. Copiar variables:
-   - `copy .env.example .env`
-2. Instalar y configurar todo automáticamente:
-   - `./install.ps1`
-3. Ejecutar API local:
-   - `./run.ps1`
-4. Ejecutar dashboard:
-   - `./infra/windows/run_dashboard.ps1`
+## Features
 
-### Instalación y configuración automática
-`install.ps1` ahora ejecuta:
-- instalación de dependencias,
-- bootstrap de agente + modelos base,
-- self-test de sistema.
+- **Real-time Market Data**: Connects to MetaTrader 5 for live price feeds
+- **Multi-Strategy System**: Runs trend following, mean reversion, and breakout strategies in parallel
+- **Confluence-Based Scoring**: Signals are scored 0-100 based on indicator agreement
+- **Paper Trading**: Realistic simulation with spread, slippage, and latency
+- **Machine Learning**: Market regime classification and adaptive parameter tuning
+- **Risk Management**: Drawdown protection, kill switch, dynamic position sizing
+- **FastAPI Backend**: RESTful API for monitoring and control
 
-## Símbolos base
-- `XAUUSD`
-- `XAUEUR`
+## Architecture
 
-Configurar en `.env`:
-- `SYMBOLS=XAUUSD,XAUEUR`
-- `BROKER_PROFILE=metaquotes_demo` o `BROKER_PROFILE=weltrade_real`
-- `ALLOW_LIVE_TRADING=true` (solo si quieres modo real armado por defecto)
+```
+app/                    # Main application
+config/                 # Configuration and settings
+data/
+    feeds/              # Market data feeds (MT5)
+    models/             # Data models
+    processors/         # Feature engineering
+strategies/             # Trading strategies
+indicators/             # Technical indicators
+engine/                 # Signal and scoring engines
+simulation/             # Paper trading simulation
+ml/                     # Machine learning models
+optimization/           # Parameter optimization
+risk/                   # Risk management
+database/               # Database models
+api/                    # FastAPI routes
+utils/                  # Utilities and helpers
+```
 
-## Mejoras aplicadas (primeras 3)
-1. Walk-forward temporal en entrenamiento.
-2. Calibración probabilística (sigmoid) en modelos.
-3. Selección automática de modelo por régimen (`trending`, `ranging`, `high_volatility`).
+## Installation
 
-## Funcionalidad implementada (fase actual)
-- Conexión robusta con reintentos a MT5 (`ResilientMT5Connector`).
-- Obtención de snapshot de mercado y OHLCV desde MT5 para múltiples símbolos.
-- Botón principal Run/Stop Strategy (simulación por defecto / real bajo control).
-- Indicador de señal para próximos 5 minutos.
-- Gráfico principal de velas japonesas + historial de señales.
-- Sistema de señales con ingesta, análisis y feedback.
-- Agente adaptativo online con estado preentrenado versionado en el repositorio.
-- Pipeline ML funcional con entrenamiento, inferencia y validación por `green_flag`.
-- Control de seguridad para modo real (`live_armed`).
+### Prerequisites
 
-## Endpoints clave de validación
-- `GET /system/validate`
-- `GET /signal/indicator5m`
-- `POST /strategy/toggle`
-- `GET /signals/analyze`
-- `GET /ml/validate/data`
-- `GET /ml/validate/model`
+- Python 3.11+
+- MetaTrader 5 (optional, for live data)
+- PostgreSQL (optional, defaults to SQLite)
 
-## Documentación
-- Arquitectura general: `docs/estructura_proyecto_mt5_ml_windows.md`
-- Conexión brokers MT5: `docs/conexion_brokers_mt5.md`
-- Referencias conexión MT5: `docs/referencias_conexion_mt5.md`
-- Dashboard operativo: `docs/dashboard_operativo.md`
-- Señales + agente: `docs/adaptive_agent_signals.md`
-- Referencias ML: `docs/referencias_ml_trading.md`
-- Plan inmediato de ejecución: `docs/plan_ejecucion_fase_0_1.md`
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configure Environment
+
+Create a `.env` file:
+
+```env
+# MT5 Connection (optional)
+MT5_LOGIN=your_login
+MT5_PASSWORD=your_password
+MT5_SERVER=MetaQuotes-Demo
+
+# Application Settings
+DEBUG=false
+LOG_LEVEL=INFO
+DATABASE_URL=sqlite+aiosqlite:///./trading.db
+
+# Trading Settings
+INITIAL_BALANCE=10000.0
+DEFAULT_SYMBOL=EURUSD
+MAX_DRAWDOWN_PCT=5.0
+```
+
+## Running the System
+
+### Start the API Server
+
+```bash
+cd app
+python main.py
+```
+
+Or with uvicorn directly:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Root endpoint |
+| `/api/status` | GET | System status |
+| `/api/signals` | GET | Recent trading signals |
+| `/api/trades` | GET | Trade history |
+| `/api/performance` | GET | Performance metrics |
+| `/api/risk-status` | GET | Risk management status |
+| `/api/strategies` | GET | Strategy information |
+| `/api/start` | POST | Start trading loop |
+| `/api/stop` | POST | Stop trading loop |
+| `/api/control/reset-kill-switch` | POST | Reset kill switch |
+
+## Strategies
+
+### Trend Following
+- Uses MA alignment, ADX, MACD, RSI, and Ichimoku
+- Enters trades in direction of established trend
+- Best performance in trending markets
+
+### Mean Reversion
+- Trades oversold/overbought conditions
+- Uses RSI, Bollinger Bands, Stochastic
+- Best performance in ranging markets
+
+### Breakout
+- Detects consolidation breakouts with volume confirmation
+- Uses support/resistance levels, ADX, volume analysis
+- Best performance during volatility expansion
+
+## Risk Management
+
+- **Max Drawdown**: Stops trading at 10% drawdown
+- **Daily Loss Limit**: 3% daily loss limit
+- **Position Sizing**: Dynamic based on risk per trade
+- **Kill Switch**: Automatic halt on adverse conditions
+- **Consecutive Loss Protection**: Reduces size after losses
+
+## Machine Learning
+
+The system includes:
+
+1. **Market Regime Classifier** (LightGBM)
+   - Classifies: TRENDING_UP, TRENDING_DOWN, RANGING, HIGH_VOLATILITY, LOW_VOLATILITY
+   - Retrains periodically with new data
+
+2. **Adaptive Parameter Tuning**
+   - Adjusts strategy parameters based on performance
+   - Tracks optimal parameters per market condition
+
+## Monitoring
+
+View logs in the `logs/` directory or stream via API:
+
+```bash
+curl http://localhost:8000/api/info
+```
+
+## Development
+
+### Add a New Strategy
+
+1. Create a new file in `strategies/`
+2. Inherit from `BaseStrategy`
+3. Implement `generate_signal()` method
+4. Register in `SignalEngine`
+
+### Add a New Indicator
+
+1. Create function in `indicators/technical_indicators.py`
+2. Add to `calculate_all_indicators()`
+3. Include in feature engineering pipeline
+
+## Disclaimer
+
+This system is for educational and research purposes. Paper trading results do not guarantee future performance. Always test thoroughly before considering live deployment.
+
+## License
+
+MIT License
