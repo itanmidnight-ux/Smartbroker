@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "regimes": {
+    "trending": {
+      "q": {
+        "buy": 0.20319148936170212,
+        "sell": -0.03,
+        "hold": 0.01
+      },
+      "n": {
+        "buy": 188,
+        "sell": 70,
+        "hold": 40
+      }
+    },
+    "ranging": {
+      "q": {
+        "buy": 0.03,
+        "sell": 0.04,
+        "hold": 0.02
+      },
+      "n": {
+        "buy": 120,
+        "sell": 125,
+        "hold": 90
+      }
+    },
+    "high_volatility": {
+      "q": {
+        "buy": -0.12,
+        "sell": -0.09,
+        "hold": 0.05
+      },
+      "n": {
+        "buy": 65,
+        "sell": 63,
+        "hold": 100
+      }
+    },
+    "unknown": {
+      "q": {
+        "buy": 0.0,
+        "sell": 0.0,
+        "hold": 0.0
+      },
+      "n": {
+        "buy": 1,
+        "sell": 1,
+        "hold": 1
+      }
+    }
+  }
+}
