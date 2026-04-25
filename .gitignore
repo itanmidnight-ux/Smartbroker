@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+logs/
+data/raw/
+data/processed/
+python/models/
+python/.pytest_cache/
+python/.mypy_cache/
+python/.ruff_cache/
+
+data/signals.db
+!python/models/adaptive_agent_state.json

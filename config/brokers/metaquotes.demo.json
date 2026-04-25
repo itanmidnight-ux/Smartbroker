@@ -1,0 +1,10 @@
+{
+  "name": "metaquotes_demo",
+  "mode": "paper",
+  "description": "Perfil de pruebas para backtesting y validación en servidor demo.",
+  "server": "MetaQuotes-Demo",
+  "terminal_path": "C:/Program Files/MetaTrader 5/terminal64.exe",
+  "login_env": "MT5_LOGIN",
+  "password_env": "MT5_PASSWORD",
+  "risk_profile": "conservative"
+}
