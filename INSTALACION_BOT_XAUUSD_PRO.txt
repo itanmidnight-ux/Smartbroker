@@ -1,0 +1,524 @@
+═══════════════════════════════════════════════════════════════════
+  BOT XAUUSD PRO - GUÍA COMPLETA DE INSTALACIÓN Y USO
+  Versión 1.0 - Sistema de Trading Automatizado para XAUUSD
+═══════════════════════════════════════════════════════════════════
+
+## 📋 ÍNDICE
+
+1. Requisitos Previos
+2. Instalación Paso a Paso
+3. Configuración del Bot
+4. Parámetros Recomendados
+5. Estrategia de Trading
+6. Gestión de Riesgo
+7. Monitoreo y Mantenimiento
+8. Solución de Problemas
+9. Preguntas Frecuentes
+
+═══════════════════════════════════════════════════════════════════
+## 1. REQUISITOS PREVIOS
+═══════════════════════════════════════════════════════════════════
+
+✅ MetaTrader 5 instalado (Weltrade o MetaQuotes-Demo)
+✅ Cuenta de trading (Demo o Real) activada
+✅ Símbolo XAUUSD disponible en tu broker
+✅ Conexión a internet estable
+✅ Capital mínimo recomendado: $5 USD (cuenta real)
+✅ Apalancamiento mínimo: 1:500 (recomendado para cuentas pequeñas)
+
+═══════════════════════════════════════════════════════════════════
+## 2. INSTALACIÓN PASO A PASO
+═══════════════════════════════════════════════════════════════════
+
+### PASO 1: Localizar Carpeta de Datos de MT5
+
+1. Abre MetaTrader 5
+2. Ve al menú: Archivo > Abrir Carpeta de Datos
+3. Se abrirá el explorador de archivos en la carpeta correcta
+
+### PASO 2: Copiar el Bot
+
+1. Navega dentro de la carpeta abierta a: MQL5 > Experts
+2. Copia el archivo "BOT_XAUUSD_PRO.mq5" en esta carpeta
+3. Si existe una versión anterior, reemplázala
+
+### PASO 3: Reiniciar MetaTrader
+
+1. CIERRA completamente MetaTrader 5
+2. Vuelve a abrir MetaTrader 5
+3. Esto permite que MT5 detecte el nuevo bot
+
+### PASO 4: Compilar el Bot
+
+1. Presiona Ctrl + E para abrir el Explorador
+2. En el panel izquierdo, expande "Asesores Expertos"
+3. Busca "BOT_XAUUSD_PRO" en la lista
+4. Haz clic derecho sobre él > Modificar
+5. Se abrirá el Editor MQL5 (MetaEditor)
+6. Presiona F7 o haz clic en "Compilar"
+7. Espera el mensaje: "0 errores, 0 advertencias"
+
+⚠️ IMPORTANTE: Si aparecen errores de compilación:
+   - Verifica que el archivo esté en UTF-8 sin BOM
+   - Usa Notepad++ para convertir si es necesario
+   - Reinstala el archivo y recompila
+
+═══════════════════════════════════════════════════════════════════
+## 3. CONFIGURACIÓN DEL BOT EN EL GRÁFICO
+═══════════════════════════════════════════════════════════════════
+
+### PASO 1: Preparar Gráfico XAUUSD
+
+1. Ve a: Ver > Símbolos (Ctrl + U)
+2. Busca "XAUUSD" en la lista
+3. Selecciónalo y haz clic en "Mostrar"
+4. Cierra la ventana de símbolos
+
+### PASO 2: Crear/Seleccionar Gráfico
+
+1. Abre un nuevo gráfico: Archivo > Nuevo Gráfico
+2. Selecciona: XAUUSD
+3. Timeframe recomendado: M1 (1 minuto) o M5 (5 minutos)
+4. El gráfico debe mostrar velas de XAUUSD
+
+### PASO 3: Activar el Bot
+
+1. En el Explorador (Ctrl + E), busca "BOT_XAUUSD_PRO"
+2. Arrastra el bot al gráfico de XAUUSD
+3. Se abrirá la ventana de configuración
+
+### PASO 4: Configurar Permisos
+
+En la ventana que aparece:
+
+PESTAÑA "COMÚN":
+☑ Marcar: "Permitir comercio automático"
+☑ Marcar: "Permitir importaciones DLL"
+☐ Desmarcar: "Confirmar operaciones" (opcional)
+
+PESTAÑA "PARÁMETROS":
+→ Configurar según tu capital (ver sección 4)
+
+PESTAÑA "EVENTOS":
+→ No requiere cambios
+
+Haz clic en "Aceptar" para activar el bot
+
+### PASO 5: Verificar Activación
+
+Debes ver:
+- Icono del bot en la esquina superior derecha del gráfico
+- Mensaje en la pestaña "Expertos" (Terminal): "BOT XAUUSD PRO iniciado correctamente"
+- Si ves un icono gris, el comercio automático está desactivado
+
+═══════════════════════════════════════════════════════════════════
+## 4. PARÁMETROS RECOMENDADOS SEGÚN CAPITAL
+═══════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CAPITAL $5 - $50 (CUENTA MICRO)                                │
+├─────────────────────────────────────────────────────────────────┤
+│  InitialLot = 0.01         (Lote inicial mínimo)                │
+│  MaxLot = 0.15             (Lote máximo conservador)            │
+│  MaxOpenTrades = 8         (Máximo 8 trades simultáneos)        │
+│  TargetProfit = 0.30       (Ganancia $0.30 por trade)           │
+│  CorrectionTime = 6        (Validación cada 6 segundos)         │
+│  SLMultiplier = 1.5        (Stop Loss dinámico)                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CAPITAL $50 - $200 (CUENTA PEQUEÑA)                            │
+├─────────────────────────────────────────────────────────────────┤
+│  InitialLot = 0.02         (Lote inicial)                       │
+│  MaxLot = 0.20             (Lote máximo)                        │
+│  MaxOpenTrades = 12        (Hasta 12 trades)                    │
+│  TargetProfit = 0.50       (Ganancia $0.50 por trade)           │
+│  CorrectionTime = 6        (Validación 6 segundos)              │
+│  SLMultiplier = 1.5        (Stop Loss estándar)                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CAPITAL $200 - $500 (CUENTA MEDIANA)                           │
+├─────────────────────────────────────────────────────────────────┤
+│  InitialLot = 0.03         (Lote inicial)                       │
+│  MaxLot = 0.25             (Lote máximo)                        │
+│  MaxOpenTrades = 16        (Máximo permitido)                   │
+│  TargetProfit = 0.75       (Ganancia $0.75 por trade)           │
+│  CorrectionTime = 6        (Validación 6 segundos)              │
+│  SLMultiplier = 1.5        (Stop Loss estándar)                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CAPITAL $500 - $1000+ (CUENTA GRANDE)                          │
+├─────────────────────────────────────────────────────────────────┤
+│  InitialLot = 0.05         (Lote inicial)                       │
+│  MaxLot = 0.30             (Lote máximo absoluto)               │
+│  MaxOpenTrades = 16        (Máximo permitido)                   │
+│  TargetProfit = 1.00       (Ganancia $1.00 por trade)           │
+│  CorrectionTime = 6        (Validación 6 segundos)              │
+│  SLMultiplier = 1.5        (Stop Loss estándar)                 │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+## 5. ESTRATEGIA DE TRADING IMPLEMENTADA
+═══════════════════════════════════════════════════════════════════
+
+### INDICADORES UTILIZADOS
+
+1. EMA Rápida (9 períodos)
+   - Detecta cambios inmediatos de tendencia
+   - Cruce con EMA lenta genera señal primaria
+
+2. EMA Lenta (21 períodos)
+   - Confirma tendencia principal
+   - Filtra señales falsas
+
+3. RSI (14 períodos)
+   - Rango operativo: 30-70
+   - Confirmación de momentum
+   - Evita entradas en sobrecompra/sobreventa extrema
+
+4. MACD (12, 26, 9)
+   - Confirmación de tendencia
+   - Cruce de líneas valida entrada
+   - Filtra ruido de timeframe bajos
+
+5. ATR (14 períodos)
+   - Mide volatilidad actual
+   - Calcula Stop Loss dinámico
+   - Filtra mercados sin movimiento
+
+### CONDICIONES DE ENTRADA (BUY)
+
+✓ EMA 9 cruza POR ENCIMA de EMA 21
+✓ RSI entre 30 y 50 (momentum alcista, no sobrecomprado)
+✓ MACD línea principal cruza POR ENCIMA de línea de señal
+✓ ATR > mínimo configurado (volatilidad suficiente)
+
+### CONDICIONES DE ENTRADA (SELL)
+
+✓ EMA 9 cruza POR DEBAJO de EMA 21
+✓ RSI entre 50 y 70 (momentum bajista, no sobrevendido)
+✓ MACD línea principal cruza POR DEBAJO de línea de señal
+✓ ATR > mínimo configurado (volatilidad suficiente)
+
+### SISTEMA DE SALIDA
+
+🎯 Cierre por Ganancia:
+   - Cuando profit >= TargetProfit (en USD)
+   - Cierre automático e inmediato
+   - Reinicio del lotaje al valor inicial
+
+🛑 Cierre por Stop Loss:
+   - SL dinámico basado en ATR × multiplicador
+   - Protege contra movimientos adversos grandes
+   - Calculado automáticamente en cada entrada
+
+⚠️ Modo Corrección (6.6 segundos):
+   - Se activa cuando trade tiene pérdidas
+   - Analiza indicadores cada 6 segundos
+   - Cierra trade si indicadores confirman dirección incorrecta
+   - Mantiene trade si indicadores aún son favorables
+
+═══════════════════════════════════════════════════════════════════
+## 6. GESTIÓN DE RIESGO Y SISTEMA PIRAMIDAL
+═══════════════════════════════════════════════════════════════════
+
+### SISTEMA PIRAMIDAL INVERSO
+
+El bot usa un sistema de escalado progresivo:
+
+Trade #1 → 0.01 lote (entrada inicial)
+Trade #2 → 0.02 lotes (si el primero fue exitoso)
+Trade #3 → 0.03 lotes (acumulación gradual)
+...
+Trade N → Máximo 0.30 lotes (tope máximo)
+
+VENTAJAS:
+✓ Comienza con riesgo mínimo
+✓ Aumenta exposición solo con ganancias
+✓ Limita pérdidas en rachas negativas
+✓ Nunca arriesga más del 2-3% por trade
+
+### REGLAS DE PROTECCIÓN
+
+1. Máximo 16 trades abiertos simultáneamente
+   - Evita sobre-exposición
+   - Controla riesgo total
+
+2. Reset después de pérdida
+   - Si un trade cierra en pérdida: vuelve al lote inicial
+   - Previene espirales de pérdidas
+
+3. Filtro de volatilidad (ATR)
+   - No opera en mercados sin movimiento
+   - Evita spreads altos y ejecución pobre
+
+4. Filtro horario (opcional)
+   - Opera solo en horas de alta liquidez
+   - Evita sesiones asiáticas (baja volatilidad)
+
+### CÁLCULO DE RIESGO POR TRADE
+
+Ejemplo con cuenta de $100:
+- Lote inicial: 0.01
+- Valor por pip: ~$0.10 (XAUUSD)
+- Stop Loss típico: 20-30 pips (según ATR)
+- Pérdida máxima por trade: $2-3 USD
+- Riesgo porcentual: 2-3%
+
+═══════════════════════════════════════════════════════════════════
+## 7. MONITOREO Y MANTENIMIENTO DIARIO
+═══════════════════════════════════════════════════════════════════
+
+### CHECKLIST DIARIO (OBLIGATORIO)
+
+Mañana (antes de operar):
+☐ Verificar conexión a internet
+☐ Confirmar que MT5 está conectado al servidor
+☐ Revisar spread actual de XAUUSD (debe ser < 3 pips)
+☐ Verificar noticias económicas del día (ForexFactory)
+☐ Confirmar capital disponible
+
+Durante la sesión:
+☐ Revisar pestaña "Expertos" cada 30 minutos
+☐ Monitorear trades abiertos en pestaña "Operaciones"
+☐ Verificar que el bot sigue abriendo/cerrando trades
+☐ Observar drawdown temporal (no debe superar 20%)
+
+Noche (después de operar):
+☐ Revisar historial de trades del día
+☐ Calcular profit/pérdida total
+☐ Anotar estadísticas en bitácora
+☐ Verificar que no hay trades abiertos (si usas filtro horario)
+
+### ESTADÍSTICAS A MONITOREAR
+
+Winrate esperado: 65-75%
+Profit Factor esperado: 1.5-2.0
+Drawdown máximo aceptable: 20%
+Trades por día: 5-15 (dependiendo de volatilidad)
+
+### CUÁNDO DETENER EL BOT
+
+🔴 DETENER INMEDIATAMENTE SI:
+- Pérdida > 20% del capital en un día
+- Más de 5 pérdidas consecutivas
+- Spread de XAUUSD > 5 pips constantemente
+- Noticias económicas de alto impacto próximas
+- Problemas de conexión o plataforma
+
+🟡 REDUCIR RIESGO SI:
+- Winrate < 50% en 20+ trades
+- Drawdown entre 10-20%
+- Mercado lateral sin tendencia clara
+
+═══════════════════════════════════════════════════════════════════
+## 8. SOLUCIÓN DE PROBLEMAS (TROUBLESHOOTING)
+═══════════════════════════════════════════════════════════════════
+
+### ERROR 1: Bot no abre ningún trade
+
+POSIBLES CAUSAS:
+❌ Símbolo incorrecto (no es XAUUSD)
+❌ Comercio automático desactivado
+❌ Volatilidad insuficiente (ATR < mínimo)
+❌ Fuera del horario configurado
+❌ Ya alcanzó máximo de trades abiertos
+
+SOLUCIÓN:
+✓ Verifica que el gráfico sea XAUUSD
+✓ Activa "Permitir comercio automático" (botón en toolbar)
+✓ Revisa valor de ATR en indicador separado
+✓ Verifica hora actual vs. configuración StartHour/EndHour
+✓ Cierra trades abiertos o aumenta MaxOpenTrades
+
+---
+
+### ERROR 2: "OrderSend failed - retcode 10006"
+
+SIGNIFICADO: Volumen inválido
+
+SOLUCIÓN:
+✓ Reduce InitialLot a 0.01
+✓ Verifica volumen mínimo del símbolo:
+  - Click derecho en gráfico > Especificación
+  - Revisa "Volumen mínimo"
+✓ Ajusta Inp_InitialLot según mínimo del broker
+
+---
+
+### ERROR 3: "OrderSend failed - retcode 10004"
+
+SIGNIFICADO: Símbolo no existe
+
+SOLUCIÓN:
+✓ Asegúrate de estar en gráfico XAUUSD
+✓ Verifica que XAUUSD esté habilitado en tu broker
+  - Herramientas > Opciones > Servidores
+  - Descarga historial de XAUUSD
+✓ Algunos brokers usan nombres diferentes:
+  - Gold, GOLD, XAUUSDc, etc.
+  - Ajusta el bot si es necesario
+
+---
+
+### ERROR 4: Trades no se cierran con ganancia
+
+POSIBLES CAUSAS:
+❌ TargetProfit muy alto para el lotaje actual
+❌ Spread alto consume ganancias
+❌ Swap negativo en posiciones overnight
+
+SOLUCIÓN:
+✓ Reduce TargetProfit (ej: de 0.50 a 0.30)
+✓ Opera solo en horario de baja spread (8:00-20:00 UTC)
+✓ Cierra trades antes del rollover (5 PM EST)
+✓ Verifica spread actual: debe ser < 3 pips
+
+---
+
+### ERROR 5: Bot cierra trades demasiado rápido en pérdidas
+
+POSIBLES CAUSAS:
+❌ Modo Corrección muy agresivo
+❌ Indicadores en contra de la posición
+
+SOLUCIÓN:
+✓ Aumenta CorrectionTime (de 6 a 10 segundos)
+✓ Ajusta niveles de RSI (amplía rango)
+✓ Revisa si hay noticias causando volatilidad extrema
+✓ Considera aumentar SLMultiplier para más espacio
+
+---
+
+### ERROR 6: Errores de compilación en MetaEditor
+
+POSIBLES CAUSAS:
+❌ Caracteres especiales corruptos
+❌ Encoding incorrecto del archivo
+❌ Versión de MT5 desactualizada
+
+SOLUCIÓN:
+✓ Abre archivo en Notepad++
+✓ Convierte a: UTF-8 sin BOM
+✓ Guarda y recompila (F7)
+✓ Actualiza MT5 a última versión
+
+---
+
+### ERROR 7: Bot funciona en Demo pero no en Real
+
+POSIBLES CAUSAS:
+❌ Diferencias en especificaciones del símbolo
+❌ Requiere autorización adicional en cuenta real
+❌ Broker restringe EAs en cuentas reales
+
+SOLUCIÓN:
+✓ Contacta a tu broker para habilitar EAs
+✓ Verifica que permisos DLL estén activados
+✓ Revisa diferencias en volumen mínimo/máximo
+✓ Prueba con lotaje más bajo en cuenta real
+
+═══════════════════════════════════════════════════════════════════
+## 9. PREGUNTAS FRECUENTES (FAQ)
+═══════════════════════════════════════════════════════════════════
+
+P: ¿Necesito dejar el bot corriendo 24/7?
+R: NO. Usa el filtro horario (Inp_UseTimeFilter=true) para operar
+   solo en sesiones activas (8:00-20:00 UTC recomendado).
+
+---
+
+P: ¿Puedo usar el bot en otros pares además de XAUUSD?
+R: NO. El bot está optimizado específicamente para XAUUSD.
+   Las condiciones de oro (volatilidad, spread) son únicas.
+
+---
+
+P: ¿Cuánto tiempo tarda en ver ganancias?
+R: Depende de las condiciones del mercado. En días volátiles
+   puedes ver 5-10 trades en pocas horas. En días laterales,
+   puede haber menos oportunidades.
+
+---
+
+P: ¿El bot garantiza ganancias?
+R: NINGÚN bot garantiza ganancias. Este bot está diseñado para
+   maximizar probabilidades, pero siempre existe riesgo de pérdida.
+   NUNCA arriesgues dinero que no puedas perder.
+
+---
+
+P: ¿Puedo modificar los parámetros mientras el bot corre?
+R: SÍ. Puedes cambiar parámetros en tiempo real:
+   - Click derecho en gráfico > Asesores Expertos > Propiedades
+   - Cambia valores y acepta
+   - El bot aplicará nuevos parámetros inmediatamente
+
+---
+
+P: ¿Qué pasa si se va la luz o internet?
+R: Los trades abiertos permanecen en el servidor del broker.
+   Cuando reconectes, el bot retomará operación normal.
+   Sin embargo, trades sin SL podrían sufrir pérdidas grandes.
+
+---
+
+P: ¿Necesito VPS para correr el bot?
+R: Para trading serio, SÍ. Un VPS asegura operación 24/7 sin
+   interrupciones. Costo aproximado: $10-30/mes.
+   Proveedores recomendados: ForexVPS, Vultr, DigitalOcean.
+
+---
+
+P: ¿Cómo sé si el bot está funcionando correctamente?
+R: Deberías ver:
+   ✓ Mensajes en pestaña "Expertos" cada vez que abre/cierra trade
+   ✓ Trades en pestaña "Operaciones" cuando hay posiciones abiertas
+   ✓ Historial en pestaja "Historia" después de cerrar trades
+   ✓ Icono del bot activo (azul, no gris) en el gráfico
+
+---
+
+P: ¿Puedo correr múltiples instancias del bot?
+R: SÍ, en diferentes gráficos o símbolos. Cada instancia debe tener
+   un MagicNumber diferente para distinguirse.
+
+---
+
+P: ¿El bot funciona en cuenta islámica (swap-free)?
+R: SÍ. El bot no depende de swap para su lógica. De hecho,
+   cuentas swap-free son mejores para holds prolongados.
+
+═══════════════════════════════════════════════════════════════════
+## 10. CONTACTO Y ACTUALIZACIONES
+═══════════════════════════════════════════════════════════════════
+
+Versión actual: 1.00
+Fecha de lanzamiento: Diciembre 2024
+
+Próximas mejoras planificadas:
+- Panel visual de estadísticas en gráfico
+- Detector automático de noticias económicas
+- Optimización de parámetros por sesión
+- Export de datos a Excel/CSV
+- Modo backtesting integrado
+
+═══════════════════════════════════════════════════════════════════
+## ⚠️ ADVERTENCIA DE RIESGO
+═══════════════════════════════════════════════════════════════════
+
+EL TRADING DE FOREX Y CFDs IMPLICA UN ALTO NIVEL DE RIESGO Y PUEDE
+NO SER ADECUADO PARA TODOS LOS INVERSORES. EL APALANCAMIENTO PUEDE
+TRABAJAR TANTO A SU FAVOR COMO EN SU CONTRA. ANTES DE DECIDIR OPERAR,
+DEBE CONSIDERAR CUIDADOSAMENTE SUS OBJETIVOS DE INVERSIÓN, NIVEL DE
+EXPERIENCIA Y DESEOS DE ASUMIR RIESGOS. EXISTE LA POSIBILIDAD DE QUE
+PUEDA SUFRIR UNA PÉRDIDA PARCIAL O TOTAL DE SU CAPITAL.
+
+ESTE BOT SE PROPORCIONA "TAL CUAL" SIN GARANTÍAS DE NINGÚN TIPO.
+EL USUARIO ASUME TODA RESPONSABILIDAD POR LAS DECISIONES DE TRADING.
+
+═══════════════════════════════════════════════════════════════════
+¡BUENA SUERTE EN TU TRADING! 🚀📈💰
+═══════════════════════════════════════════════════════════════════

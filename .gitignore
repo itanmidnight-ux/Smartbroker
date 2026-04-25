@@ -1,14 +1,64 @@
-.venv/
+```
+# Python
 __pycache__/
-*.pyc
-.env
-logs/
-data/raw/
-data/processed/
-python/models/
-python/.pytest_cache/
-python/.mypy_cache/
-python/.ruff_cache/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+env/
+ENV/
+.venv/
+.env/
+.ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/modules/
+.pytest_cache/
+.hypothesis/
+.conda/
+.mypy_cache/
 
-data/signals.db
-!python/models/adaptive_agent_state.json
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+```
