@@ -1,0 +1,104 @@
+# Configuración Global del Trading Bot Pro v2.0
+# Basado en auditoría de XAU_USD_MultiTrader_Pro v7.5
+
+system:
+  name: "AI Trading System Pro"
+  version: "2.0.0"
+  mode: "live_simulation" # live_simulation, backtest
+  log_level: "INFO"
+
+network:
+  host: "0.0.0.0"
+  port: 9000
+  max_ping_ms: 500
+  data_source: "yfinance" # o tradingview (requiere librería extra)
+
+timeframes:
+  allowed: ["5m", "15m", "30m", "1h", "2h", "4h", "8h", "12h"]
+  active: "15m" # Timeframe principal
+  
+  # Configuración específica por TF (Auditoría MQL5)
+  configs:
+    "5m":
+      maturity_seconds: 30
+      valid_threshold: 3
+      candle_period: 300
+      enabled: false # Deshabilitado por defecto si Spread > ATR
+    "15m":
+      maturity_seconds: 60
+      valid_threshold: 3
+      candle_period: 900
+      enabled: true
+    "30m":
+      maturity_seconds: 300
+      valid_threshold: 2 # Más leniente en TF altos
+      candle_period: 1800
+      enabled: true
+    "1h":
+      maturity_seconds: 600
+      valid_threshold: 2 # Más leniente en TF altos
+      candle_period: 3600
+      enabled: true
+    "4h":
+      maturity_seconds: 1200
+      valid_threshold: 2
+      candle_period: 14400
+      enabled: true
+
+risk_management:
+  use_auto_lot: true
+  base_risk_percent: 0.5
+  max_daily_loss_pct: 5.0
+  critical_drawdown: 10.0
+  max_consecutive_losses: 3
+  rr_minimum: 3.0
+  
+  # Pirámide de Lotaje (Estilo MQL5)
+  pyramid:
+    enabled: true
+    tiers:
+      - capital_max: 1000
+        lot: 0.01
+      - capital_max: 3000
+        lot: 0.02
+      - capital_max: 6000
+        lot: 0.03
+      - capital_max: 10000
+        lot: 0.05
+      - capital_max: 999999
+        lot: 0.10
+
+  # Filtros de Seguridad
+  filters:
+    spread_atr_ratio_max: 0.4 # Si Spread > 40% del ATR, NO operar
+    kill_switch_enabled: true
+    news_filter_enabled: false
+
+ict_settings:
+  use_kill_zones: true
+  london_zone: { start: 7, end: 12 } # UTC
+  ny_zone: { start: 13, end: 17 }   # UTC
+  
+  fvg:
+    min_size_points: 10.0
+    max_age_candles: 5
+  
+  order_blocks:
+    strength_required: 3
+  
+  ote:
+    min: 0.62
+    max: 0.79
+
+ml_settings:
+  target_win_rate: 0.80
+  retrain_threshold: 0.75 # Si baja de esto, reentrenar
+  features_count: 50
+  ensemble_models: ["random_forest", "gradient_boosting", "mlp"]
+  use_lstm: true
+
+capital_protection:
+  enabled: true
+  threshold_usd: 30.0
+  preservation_percent: 20.0
+  peak_profit_retrace_pct: 30.0 # Cerrar si retrocede 30% desde el pico de ganancia
